@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # export FLASK_ENV=development
-# flask run
+# pipenv run flask run
 
 from flask import Flask
 from flask import send_file
@@ -13,6 +13,10 @@ app = Flask(__name__)
 def index():
     return send_file('./static/index.html')
 
+
+@app.route('/index2.html')
+def index2():
+    return send_file('./static/index2.html')
 
 @app.route('/stock/four_point/<string:target_stock>', methods=['GET'])
 def check_four_point(target_stock):
