@@ -36,7 +36,6 @@ def capture_data(target_stock):
 
                 temp_list.append(temp)
             result["Data"].append(temp_list)
-    print(result)
     return result
 
     
