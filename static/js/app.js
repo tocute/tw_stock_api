@@ -83,7 +83,7 @@ var svg = d3.select("body").append("svg")
 
 var dataArr;
 
-d3.json("data.json", function(error, data) {
+d3.json("./static/data.json", function(error, data) {
     var accessor = candlestick.accessor();
     var jsonData = data["Data"];
     
@@ -178,11 +178,13 @@ function move(coords) {
 }
 
 
-
-
-
-
-
-
+$(document).ready
+(
+  function()
+  { 
+    $("#btn_load_stock").click(() => onBtnDrawLine());
+  }
+  
+);
 
 
