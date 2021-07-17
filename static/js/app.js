@@ -6,6 +6,7 @@ var parseDate = d3.timeParse("%Y%m%d");
 
 var x = techan.scale.financetime()
         .range([0, width]);
+        
 var crosshairY = d3.scaleLinear()
         .range([height, 0]);
 
@@ -83,25 +84,24 @@ var svg = d3.select("body").append("svg")
 
 var dataArr;
 
-d3.json("./static/data.json", function(error, data) {
+
+// d3.json("./static/2330.TW.json", function(error, data) {
+//     onBtnDrawLine(data)
+// });
+
+function draw_setup(input_data){
     var accessor = candlestick.accessor();
-    var jsonData = data["Data"];
-    
+    var jsonData = input_data["Data"];
     data = 
         jsonData
         .map(function(d) {
         return {
             date: parseDate(d[0]),
-            open: +d[3],
-            high: +d[4],
-            low: +d[5],
-            close: +d[6],
-            volume: +d[9],
-            change: +d[7],
-            percentChange: +d[8],
-            fiveMA: +d[10],
-            twentyMA: +d[11],
-            sixtyMA: +d[12]
+            open: +d[1],
+            high: +d[2],
+            low: +d[3],
+            close: +d[4],
+            volume: +d[6]
         };
     }).sort(function(a, b) { return d3.ascending(accessor.d(a), accessor.d(b)); });
     
@@ -136,10 +136,9 @@ d3.json("./static/data.json", function(error, data) {
     draw(data.slice(0, data.length));
     // Only want this button to be active if the data has loaded
     d3.select("button").on("click", function() { draw(data); }).style("display", "inline");
-});
+}
 
 function draw(data) {
-//   console.log(data); 
     x.domain(data.map(candlestick.accessor().d));
     y.domain(techan.scale.plot.ohlc(data, candlestick.accessor()).domain());
     dataArr = data;
@@ -172,19 +171,10 @@ function move(coords) {
     var i;
     for (i = 0; i < dataArr.length; i ++) {
         if (coords.x === dataArr[i].date) {
-            svgText.text(d3.timeFormat("%Y/%m/%d")(coords.x) + ", 開盤：" + dataArr[i].open + ", 高：" + dataArr[i].high + ", 低："+ dataArr[i].low + ", 收盤："+ dataArr[i].close + ", 漲跌：" + dataArr[i].change + "(" + dataArr[i].percentChange + "%)" + ", 成交量： " + dataArr[i].volume + ", 5MA: " + dataArr[i].fiveMA + ", 20MA: " + dataArr[i].twentyMA + ", 60MA: " + dataArr[i].sixtyMA );
+            svgText.text(d3.timeFormat("%Y/%m/%d")(coords.x) + ", 開盤：" + dataArr[i].open + ", 高：" + dataArr[i].high + ", 低："+ dataArr[i].low + ", 收盤："+ dataArr[i].close +  ", 成交量： " + dataArr[i].volume);
         }
     }
 }
 
-
-$(document).ready
-(
-  function()
-  { 
-    $("#btn_load_stock").click(() => onBtnDrawLine());
-  }
-  
-);
 
 

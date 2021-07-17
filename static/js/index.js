@@ -1,5 +1,9 @@
+var onBtnStartQuery = function (stock) {
+  getStockFourPoints(stock)
+  drawLine(stock)
+}
 
-var onBtnGetStockFourPoints = function (stock) {
+function getStockFourPoints(stock) {
   url = "/stock/four_point/"+stock
   headers = { "Content-Type": "application/json"}
   $('#loader').show()
@@ -11,6 +15,30 @@ var onBtnGetStockFourPoints = function (stock) {
       success: function(data, status, jqXHR) 
       {
         updateAPIStatusTable(data)
+        $('#loader').hide()
+      },
+      error: function(jqXHR, textStatus, errorThrown)
+      { 
+        showWarningDialog("[Failed] " + url +"<br/>"+jqXHR.responseText+"<br/><"+jqXHR.status+">");
+        $('#loader').hide()
+      }
+    }
+  );
+}
+
+function drawLine(stock)
+{
+  url = "/stock/capture/"+stock
+  headers = { "Content-Type": "application/json"}
+  $('#loader').show()
+  $.ajax(
+    { 
+      url: url,
+      type: 'GET',
+      headers: headers,
+      success: function(data, status, jqXHR) 
+      {
+        draw_setup(data)
         $('#loader').hide()
       },
       error: function(jqXHR, textStatus, errorThrown)
@@ -62,7 +90,7 @@ $(document).ready
   { 
     $('#loader').hide()
 
-    $("#btn_query_stock").click(() => onBtnGetStockFourPoints($("#text_target_stock").val()));
+    $("#btn_query_stock").click(() => onBtnStartQuery($("#text_target_stock").val()));
   }
   
 );

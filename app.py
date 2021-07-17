@@ -9,21 +9,26 @@ import lib.capture_data as Capture
 
 app = Flask(__name__)
 
-@app.route('/')
-@app.route('/index.html')
+@app.route("/")
+@app.route("/index.html")
 def index():
-    return send_file('./static/index.html')
+    return send_file("./static/index.html")
 
 
-@app.route('/index2.html')
+@app.route("/index2.html")
 def index2():
-    Capture.capture_data("2330")
-    return send_file('./static/index2.html')
+    return send_file("./static/index2.html")
 
-@app.route('/stock/four_point/<string:target_stock>', methods=['GET'])
+
+@app.route("/stock/capture/<string:target_stock>", methods=["GET"])
+def capture_data(target_stock):
+    return Capture.capture_data(target_stock)
+
+
+@app.route("/stock/four_point/<string:target_stock>", methods=["GET"])
 def check_four_point(target_stock):
     return StockUtil.check_four_point(target_stock)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
