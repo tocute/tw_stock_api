@@ -10,6 +10,7 @@ yfinance = "*"
 pandas-datareader = "*"
 twstock = "*"
 flask = "*"
+gunicorn = "*"
 
 [dev-packages]
 
