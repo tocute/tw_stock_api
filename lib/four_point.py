@@ -2,8 +2,8 @@ import twstock
 import pandas as pd
 # 導入twstock及pandas模組，pandas模組縮寫為pd
 
-target_stock = '0050'  #股票代號變數
-stock = twstock.Stock(target_stock)  #告訴twstock我們要查詢的股票
+# target_stock = '0050'  #股票代號變數
+# stock = twstock.Stock(target_stock)  #告訴twstock我們要查詢的股票
 # target_price = stock.fetch_from(2020, 5)  #取用2020/05至今每天的交易資料
 
 # name_attribute = [
@@ -20,18 +20,10 @@ stock = twstock.Stock(target_stock)  #告訴twstock我們要查詢的股票
 # df.to_csv(filename)
 # #將Data Frame轉存為csv檔案
 
-fourPoint = twstock.BestFourPoint(stock)
+def check_four_point(target_stock):
+    stock = twstock.Stock(target_stock)  #告訴twstock我們要查詢的股票
+    fourPoint = twstock.BestFourPoint(stock)
 
-buy = fourPoint.best_four_point_to_buy() # 判斷是否為四大買點
-sell = fourPoint.best_four_point_to_sell() # 判斷是否為四大賣點
-total = fourPoint.best_four_point() # 指標綜合判斷
-
-print(buy)
-print(sell)
-print(total)
-
-print(stock.price[-5:])
-print(stock.high[-5:])
-
-stock_real = twstock.realtime.get('6462')
-print(stock_real)
+    buy = fourPoint.best_four_point_to_buy() # 判斷是否為四大買點
+    sell = fourPoint.best_four_point_to_sell() # 判斷是否為四大賣點
+    return {"buy": buy, "sell": sell}
