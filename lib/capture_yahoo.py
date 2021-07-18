@@ -1,5 +1,10 @@
 import yfinance as yf
 import pandas as pd
+import datetime
+
+import yfinance as yf
+import pandas as pd
+from pandas_datareader import data as PDReader
 
 def capture_data(target_stock, isTW=True):
     yf.pdr_override() #以pandasreader常用的格式覆寫
@@ -8,11 +13,11 @@ def capture_data(target_stock, isTW=True):
     if isTW:
         target_stock = target_stock + '.TW' 
 
-    now = datetime.now() 
-    start_date = datetime(now.year - 1, now.month, 1)
-    end_date = datetime(now.year, now.month, now.day) #設定資料起訖日期
+    now = datetime.datetime.now() 
+    start_date = datetime.datetime(now.year - 1, now.month, 1)
+    end_date = datetime.datetime(now.year, now.month, now.day) #設定資料起訖日期
 
-    df = data.get_data_yahoo([target_stock], start_date, end_date) #將資料放到Dataframe裡面
+    df = PDReader.get_data_yahoo([target_stock], start_date, end_date) #將資料放到Dataframe裡面
     csv_data = df.to_csv()
     csv_data_list = csv_data.split('\n')
 
