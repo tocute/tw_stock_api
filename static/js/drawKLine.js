@@ -1,12 +1,13 @@
+// 設定畫圖的width, height
 var margin = {top: 20, right: 50, bottom: 30, left: 50},
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
-
+// 設定parse資料時間的格式
 var parseDate = d3.timeParse("%Y%m%d");
-
+// 使用techan這個framework拉出以時間為基準的x
 var x = techan.scale.financetime()
         .range([0, width]);
-        
+// 設定y，範圍在0 ~ height之間
 var crosshairY = d3.scaleLinear()
         .range([height, 0]);
 
@@ -24,9 +25,12 @@ var sma0 = techan.plot.sma()
 var sma1 = techan.plot.sma()
         .xScale(x)
         .yScale(y);
+
 var ema2 = techan.plot.ema()
         .xScale(x)
         .yScale(y);
+
+//設定k線圖
 var candlestick = techan.plot.candlestick()
         .xScale(x)
         .yScale(y);
@@ -36,6 +40,7 @@ var volume = techan.plot.volume()
         .accessor(candlestick.accessor())
         .xScale(x)
         .yScale(yVolume);
+// 設定 x,y 軸
 var xAxis = d3.axisBottom()
         .scale(x);
 
@@ -44,23 +49,26 @@ var yAxis = d3.axisLeft()
 var volumeAxis = d3.axisRight(yVolume)
         .ticks(3)
         .tickFormat(d3.format(",.3s"));
+// 設定十字線左右邊要顯示的文字，根據不同的軸線(yAxis, yRightAxis)來決定
 var ohlcAnnotation = techan.plot.axisannotation()
         .axis(yAxis)
         .orient('left')
         .format(d3.format(',.2f'));
+// 設定十字線上下顯示的時間
 var timeAnnotation = techan.plot.axisannotation()
         .axis(xAxis)
         .orient('bottom')
         .format(d3.timeFormat('%Y-%m-%d'))
         .translate([0, height]);
 
+// 設定十字線
 var crosshair = techan.plot.crosshair()
-        .xScale(x)
+        .xScale(x) // 根據設定的x, y 去產生
         .yScale(crosshairY)
         .xAnnotation(timeAnnotation)
         .yAnnotation(ohlcAnnotation)
+        .on("move", move);  // 設定滑鼠移動過去時要呼叫的function
 
-        .on("move", move);
 var textSvg = d3.select("body").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", margin.top + margin.bottom)
@@ -76,20 +84,20 @@ var svgText = textSvg.append("g")
             .style("text-anchor", "start")
             .text("");
 
-var svg = d3.select("body").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+//設定畫圖區域
+var svg 
 var dataArr;
 
 
-// d3.json("./static/2330.TW.json", function(error, data) {
-//     onBtnDrawLine(data)
-// });
-
+// 讀取data，畫圖
 function draw_setup(input_data){
+    svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("id", "k-line-svg")
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
     var accessor = candlestick.accessor();
     var jsonData = input_data["Data"];
     data = 
@@ -101,10 +109,11 @@ function draw_setup(input_data){
             high: +d[2],
             low: +d[3],
             close: +d[4],
-            volume: +d[6]
+            volume: +d[6] //成交量
         };
     }).sort(function(a, b) { return d3.ascending(accessor.d(a), accessor.d(b)); });
     
+    // 畫 candlestick
     svg.append("g")
             .attr("class", "candlestick");
     svg.append("g")
@@ -117,7 +126,7 @@ function draw_setup(input_data){
             .attr("class", "volume");
     svg.append("g")
             .attr("class", "volume axis");
-    
+    // 畫x, y軸
     svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")");
@@ -131,15 +140,17 @@ function draw_setup(input_data){
             .style("text-anchor", "end")
             .text("Price ($)");
     
-    
     // Data to display initially
     draw(data.slice(0, data.length));
+
     // Only want this button to be active if the data has loaded
     d3.select("button").on("click", function() { draw(data); }).style("display", "inline");
 }
 
 function draw(data) {
+    // 設定x的資料來源
     x.domain(data.map(candlestick.accessor().d));
+    // 設定y的資料來源
     y.domain(techan.scale.plot.ohlc(data, candlestick.accessor()).domain());
     dataArr = data;
     
@@ -163,7 +174,6 @@ function draw(data) {
     svg.select("g.ema.ma-2").datum(techan.indicator.sma().period(50)(data)).call(sma0);
 
     svg.select("g.volume.axis").call(volumeAxis);
-
 }
 
 

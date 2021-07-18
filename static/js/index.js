@@ -1,5 +1,9 @@
 var onBtnStartQuery = function (stock) {
+  $("#query_result_table").find('thead tr').remove();
+  $("#query_result_table").find('tbody tr').remove();
   getStockFourPoints(stock)
+
+  $("#k-line-svg").remove();
   drawLine(stock)
 }
 
@@ -39,12 +43,10 @@ function drawLine(stock)
       success: function(data, status, jqXHR) 
       {
         draw_setup(data)
-        $('#loader').hide()
       },
       error: function(jqXHR, textStatus, errorThrown)
       { 
         showWarningDialog("[Failed] " + url +"<br/>"+jqXHR.responseText+"<br/><"+jqXHR.status+">");
-        $('#loader').hide()
       }
     }
   );
@@ -89,7 +91,6 @@ $(document).ready
   function()
   { 
     $('#loader').hide()
-
     $("#btn_query_stock").click(() => onBtnStartQuery($("#text_target_stock").val()));
   }
   

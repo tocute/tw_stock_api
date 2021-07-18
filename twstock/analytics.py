@@ -21,14 +21,28 @@ class Analytics(object):
             data.pop()
         return result[::-1]
 
+    # 乖離率=(目前價格-移動平均價)/移動平均價
+
+    # 乖離率 (bias) 描述目前價格與過去一段時間平均值的距離, 
+    # 也就是價格偏離均線的程度, 乖離率變大表示距離均線越遠, 
+    # 股價漲太多了 (正乖離). 如果將移動平均值當作平均持有成本, 
+    # 則乖離率就相當於投資報酬率
+
+    # 函數 ma_bias_ratio(day1, day2) 
+    # 計算的是長短天期之間的乖離率, 不是收盤價的乖離率, 
+    # 它需要傳入兩個天期的參數, day1 為短天期, day2 為長天期, 
+    # 分別計算其移動平均值, 將得到的短天期串列減掉長天期串列即得
     def ma_bias_ratio(self, day1, day2):
         """Calculate moving average bias ratio"""
         data1 = self.moving_average(self.price, day1)
         data2 = self.moving_average(self.price, day2)
+
         result = [data1[-i] - data2[-i] for i in range(1, min(len(data1), len(data2)) + 1)]
 
         return result[::-1]
 
+    # (False, 4, 223.0)
+    # 沒有真正使用到
     def ma_bias_ratio_pivot(self, data, sample_size=5, position=False):
         """Calculate pivot point"""
         sample = data[-sample_size:]
@@ -41,7 +55,8 @@ class Analytics(object):
             pre_check_value = max(sample) < 0
 
         return ((sample_size - sample.index(check_value) < 4 and
-                 sample.index(check_value) != sample_size - 1 and pre_check_value),
+                 sample.index(check_value) != sample_size - 1 and
+                 pre_check_value),
                 sample_size - sample.index(check_value) - 1,
                 check_value)
 
