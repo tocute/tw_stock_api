@@ -14,5 +14,3 @@ def capture_data(target_stock):
 # @app.route("/stock/four_point/<string:target_stock>", methods=["GET"])
 def check_four_point(target_stock):
     return StockUtil.check_four_point(target_stock)
-
-

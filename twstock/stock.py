@@ -7,7 +7,7 @@ from collections import namedtuple
 import yfinance as yf
 import pandas as pd
 from pandas_datareader import data as PDReader
-
+from calendar import monthrange
 
 try:
     from json.decoder import JSONDecodeError
@@ -27,8 +27,8 @@ except ImportError as e:
     from codes import codes
 
 
-TWSE_BASE_URL = 'http://www.twse.com.tw/'
-TPEX_BASE_URL = 'http://www.tpex.org.tw/'
+# TWSE_BASE_URL = 'http://www.twse.com.tw/'
+# TPEX_BASE_URL = 'http://www.tpex.org.tw/'
 DATATUPLE = namedtuple('Data', ['date', 'capacity', 'turnover', 'open',
                                 'high', 'low', 'close', 'change', 'transaction'])
 
@@ -153,15 +153,12 @@ class YahooFetcher(BaseFetcher):
 
         # 股票代號變數
         sid = str(sid) + '.TW' 
-
-        now = datetime.datetime.now() 
+        month_range = monthrange(year, month)
         start_date = "%d-%02d-01" % (year, month)
-        end_date = "%d-%02d-%02d" % (now.year, now.month, now.day)
+        end_date = "%d-%02d-%02d" % (year, month, month_range[1])
         df = PDReader.get_data_yahoo([sid], start_date, end_date) #將資料放到Dataframe裡面
         
-        
         csv_data = df.to_csv()
-        
         csv_data_list = csv_data.split('\n')
         data = {'stat': 'ok', 'aaData': csv_data_list[1:]}
 
@@ -176,9 +173,9 @@ class YahooFetcher(BaseFetcher):
         temp[1] = int(items[6]) # 'capacity'
         temp[2] = int(0) # 'turnover'
         temp[3] = round(float(items[1]), 2) # 'open',
-        temp[4] = round(float(items[2]), 3) # 'high'
-        temp[5] = round(float(items[3]), 4) # 'low'
-        temp[6] = round(float(items[4]), 5) # 'close'
+        temp[4] = round(float(items[2]), 2) # 'high'
+        temp[5] = round(float(items[3]), 2) # 'low'
+        temp[6] = round(float(items[4]), 2) # 'close'
         # +/-/X表示漲/跌/不比價
         temp[7] = float(0.0)   #'change'
         temp[8] = int(0)  # 'transaction'
@@ -223,6 +220,7 @@ class Stock(analytics.Analytics):
         for year, month in self._month_year_iter(month, year, today.month, today.year):
             self.raw_data.append(self.fetcher.fetch(year, month, self.sid))
             self.data.extend(self.raw_data[-1]['data'])
+
         return self.data
 
     def fetch_31(self):
