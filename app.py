@@ -4,30 +4,18 @@
 
 from flask import Flask
 from flask import send_file
-import lib.four_point as StockUtil
-import lib.capture_data as Capture
+
+import router.router_query_stock as RouterStock
 
 app = Flask(__name__)
+app.add_url_rule('/stock/capture/<string:target_stock>', view_func=RouterStock.capture_data, methods=['GET'])
+app.add_url_rule('/stock/four_point/<string:target_stock>', view_func=RouterStock.check_four_point, methods=['GET'])
+
 
 @app.route("/")
 @app.route("/index.html")
 def index():
     return send_file("./static/index.html")
-
-
-@app.route("/index2.html")
-def index2():
-    return send_file("./static/index2.html")
-
-
-@app.route("/stock/capture/<string:target_stock>", methods=["GET"])
-def capture_data(target_stock):
-    return Capture.capture_data(target_stock)
-
-
-@app.route("/stock/four_point/<string:target_stock>", methods=["GET"])
-def check_four_point(target_stock):
-    return StockUtil.check_four_point(target_stock)
 
 
 if __name__ == "__main__":

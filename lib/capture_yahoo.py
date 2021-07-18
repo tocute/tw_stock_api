@@ -1,13 +1,12 @@
 import yfinance as yf
 import pandas as pd
-from pandas_datareader import data
-from datetime import datetime
 
-
-def capture_data(target_stock):
+def capture_data(target_stock, isTW=True):
     yf.pdr_override() #以pandasreader常用的格式覆寫
 
-    target_stock = target_stock + '.TW'  #股票代號變數
+    # 股票代號變數
+    if isTW:
+        target_stock = target_stock + '.TW' 
 
     now = datetime.now() 
     start_date = datetime(now.year - 1, now.month, 1)
@@ -36,6 +35,6 @@ def capture_data(target_stock):
 
                 temp_list.append(temp)
             result["Data"].append(temp_list)
+    
     return result
-
     

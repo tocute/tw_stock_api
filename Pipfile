@@ -8,7 +8,6 @@ backtesting = "*"
 pandas = "*"
 yfinance = "*"
 pandas-datareader = "*"
-twstock = "*"
 flask = "*"
 gunicorn = "*"
 
