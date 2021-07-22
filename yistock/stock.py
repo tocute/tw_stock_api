@@ -3,7 +3,7 @@
 import datetime
 import urllib.parse
 from collections import namedtuple
-# from twstock.proxy import get_proxies
+# from yistock.proxy import get_proxies
 import yfinance as yf
 import pandas as pd
 from pandas_datareader import data as PDReader

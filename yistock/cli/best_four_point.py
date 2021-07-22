@@ -2,7 +2,7 @@
 
 import io
 import sys
-import twstock
+import yistock
 
 # XXX: Repalce sys.stdout prevent Windows UnicodeEncodeError on cmd.exe
 stdout = io.TextIOWrapper(
@@ -13,7 +13,7 @@ def run(argv):
     print('四大買賣點判斷 Best Four Point', file=stdout)
     print('------------------------------', file=stdout)
     for sid in argv:
-        bfp = twstock.BestFourPoint(twstock.Stock(sid))
+        bfp = yistock.BestFourPoint(yistock.Stock(sid))
         bfp = bfp.best_four_point()
         print('%s: ' % (sid), end='', file=stdout)
         if bfp:

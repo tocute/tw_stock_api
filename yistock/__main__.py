@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-from twstock import cli
+from yistock import cli
 
 
 if __name__ == '__main__':

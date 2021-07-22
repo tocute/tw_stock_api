@@ -4,10 +4,10 @@ import datetime
 import json
 import time
 import requests
-import twstock
+import yistock
 import sys
 
-from twstock.proxy import get_proxies
+from yistock.proxy import get_proxies
 
 SESSION_URL = 'http://mis.twse.com.tw/stock/index.jsp'
 STOCKINFO_URL = 'http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch={stock_id}&_={time}'
@@ -61,9 +61,9 @@ def _format_stock_info(data) -> dict:
 def _join_stock_id(stocks) -> str:
     if isinstance(stocks, list):
         return '|'.join(['{}_{}.tw'.format(
-            'tse' if s in twstock.twse else 'otc', s) for s in stocks])
+            'tse' if s in yistock.twse else 'otc', s) for s in stocks])
     return '{}_{stock_id}.tw'.format(
-        'tse' if stocks in twstock.twse else 'otc', stock_id=stocks)
+        'tse' if stocks in yistock.twse else 'otc', stock_id=stocks)
 
 
 def get_raw(stocks) -> dict:
@@ -89,7 +89,7 @@ def get_raw(stocks) -> dict:
 
 def get(stocks, retry=3):
     # Prepare data
-    data = get_raw(stocks) if not mock else twstock.mock.get(stocks)
+    data = get_raw(stocks) if not mock else yistock.mock.get(stocks)
 
     # Set success
     data['success'] = False

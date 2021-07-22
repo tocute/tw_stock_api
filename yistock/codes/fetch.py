@@ -13,7 +13,7 @@ from collections import namedtuple
 import requests
 from lxml import etree
 
-from twstock.proxy import get_proxies
+from yistock.proxy import get_proxies
 
 TWSE_EQUITIES_URL = 'http://isin.twse.com.tw/isin/C_public.jsp?strMode=2'
 TPEX_EQUITIES_URL = 'http://isin.twse.com.tw/isin/C_public.jsp?strMode=4'

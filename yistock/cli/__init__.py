@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import argparse
-from twstock.codes import __update_codes
-from twstock.cli import best_four_point
-from twstock.cli import stock
-from twstock.cli import realtime
+from yistock.codes import __update_codes
+from yistock.cli import best_four_point
+from yistock.cli import stock
+from yistock.cli import realtime
 
 
 def run():

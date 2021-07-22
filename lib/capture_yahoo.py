@@ -1,4 +1,4 @@
-from twstock.stock import Stock
+from yistock.stock import Stock
 import datetime
 
 

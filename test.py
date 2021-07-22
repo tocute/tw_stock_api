@@ -1,7 +1,7 @@
 import lib.capture_yahoo as capture_yahoo
 import lib.four_point as four_point
 
-from twstock.stock import Stock
+from yistock.stock import Stock
 
 # a = capture_yahoo.capture_data("2330")
 f = four_point.check_four_point("2330")
