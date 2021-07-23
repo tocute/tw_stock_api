@@ -1,15 +1,15 @@
-var onBtnStartQuery = function (stock) {
+var onBtnStartQuery = function (stock, type) {
   $("#query_result_table").find('thead tr').remove();
   $("#query_result_table").find('tbody tr').remove();
-  getStockFourPoints(stock)
+  getStockFourPoints(stock, type)
 
   $("#k-line-svg").remove();
-  drawLine(stock)
+  drawLine(stock, type)
 }
 
-function getStockFourPoints(stock) {
+function getStockFourPoints(stock, type) {
   url = "/stock/four_point/"+stock
-  headers = { "Content-Type": "application/json"}
+  headers = { "Content-Type": "application/json", "STOCK-TYPE": type}
   $('#loader').show()
   $.ajax(
     { 
@@ -30,10 +30,10 @@ function getStockFourPoints(stock) {
   );
 }
 
-function drawLine(stock)
+function drawLine(stock, type)
 {
   url = "/stock/capture/"+stock
-  headers = { "Content-Type": "application/json"}
+  headers = { "Content-Type": "application/json", "STOCK-TYPE": type}
   $('#loader').show()
   $.ajax(
     { 
@@ -91,7 +91,7 @@ $(document).ready
   function()
   { 
     $('#loader').hide()
-    $("#btn_query_stock").click(() => onBtnStartQuery($("#text_target_stock").val()));
+    $("#btn_query_stock").click(() => onBtnStartQuery($("#text_target_stock").val(), $("#select_stock_type").val()));
   }
   
 );

@@ -36,12 +36,16 @@
     <div id="loader" class="loader"></div>
     <div class="card">
       <div class="card-header bg-success text-white" style="font-weight:bold;">
-        台股
+        台股 / 美股
       </div>
       <div class="card-body">
         <div class="input-group mb-3">
+          <select class="form-control" id="select_stock_type">
+            <option value=".TW" selected>台股</option>
+            <option value="">美股</option>
+          </select>
           <div class="input-group-prepend">
-            <span class="input-group-text">Stock </span>
+            <span class="input-group-text">Stock</span>
           </div>
           <input type="text" class="form-control" id="text_target_stock" placeholder="股票代碼">
           <button id="btn_query_stock" type="button" class="btn btn-info">查詢</button>
